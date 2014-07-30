@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -36,7 +36,7 @@ public class DurokController : MonoBehaviour {
 		yield return StartCoroutine(Player1.Deal());
 		HandController Player2 = Hand2.GetComponent<HandController>();
 		Player2.Initialize(GameDeck, HandType.Opponent);
-		Player2.gameObject.AddComponent<PlayerBrain>().Initialize(CombatZone);
+        Player2.gameObject.AddComponent<PlayerBrain>().Initialize(CombatZone);
 		yield return StartCoroutine(Player2.Deal());
 
 		Players.Add(Player1);
@@ -52,8 +52,7 @@ public class DurokController : MonoBehaviour {
 	void BeginGame()
 	{
 		Debug.Log("BeginGame");
-		Players[0].GetComponent<PlayerBrain>().EnterAttack(Players[1].GetComponent<PlayerBrain>());
-		Players[1].GetComponent<PlayerBrain>().EnterDefense();
+        StartCoroutine(Players[0].GetComponent<PlayerBrain>().BeginTurn());
 	}
 	
 	// Update is called once per frame

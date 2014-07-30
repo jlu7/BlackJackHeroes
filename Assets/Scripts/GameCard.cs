@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 public class GameCard : MonoBehaviour
 {
-	CardModel Model;
+	public CardModel Model;
 
 	GameObject clubs;
 	GameObject hearts;

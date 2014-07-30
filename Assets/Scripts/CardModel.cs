@@ -22,6 +22,42 @@ public class CardModel
 		Suit = suit;
 		Value = value;
 	}
+
+    public int GetBlackJackCardValue()
+    {
+        switch (Value)
+        {
+            case CardValue.two:
+                return 2;
+            case CardValue.three:
+                return 3;
+            case CardValue.four:
+                return 4;
+            case CardValue.five:
+                return 5;
+            case CardValue.six:
+                return 6;
+            case CardValue.seven:
+                return 7;
+            case CardValue.eight:
+                return 8;
+            case CardValue.nine:
+                return 9;
+            case CardValue.ten:
+                return 10;
+            case CardValue.Jack:
+                return 10;
+            case CardValue.Queen:
+                return 10;
+            case CardValue.King:
+                return 10;
+            case CardValue.Ace:
+                return 1;
+            default:
+                Debug.Log("BAD DATA INPUT");
+                return 0;
+        }
+    }
 }
 
 

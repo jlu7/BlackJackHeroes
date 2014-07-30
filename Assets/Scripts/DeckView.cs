@@ -24,8 +24,6 @@ public class DeckView : MonoBehaviour
 	public void Initialize()
 	{
 		deckPile = gameObject.transform.Find ("deckPile").gameObject;
-		discardPile = gameObject.transform.Find ("discardPile").gameObject;
-		trumpCardPile = gameObject.transform.Find ("trumpCardPile").gameObject;
 		deckController = GetComponent<DeckController> ();
 		StartCoroutine (Deal ());
 	}
@@ -33,8 +31,6 @@ public class DeckView : MonoBehaviour
 	IEnumerator Deal()
 	{
 		yield return null;
-		GameCard trumpCard = GameObjectUtils.AddAndPosition (CardPrefab, trumpCardPile, Vector3.zero).GetComponent<GameCard> ();
-		trumpCard.GetComponent<GameCard> ().Initialize (deckController.TakeCardFromDeck ());
 	}
 
 	public GameCard DrawCard()

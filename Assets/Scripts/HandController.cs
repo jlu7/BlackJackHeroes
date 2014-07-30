@@ -13,8 +13,9 @@ public class HandController : MonoBehaviour {
 
 	DeckController deckController;
 	DeckView deckView;
-	List<GameCard> gameCards;
+	public List<GameCard> gameCards;
 	HandType handOwner;
+    int HandTotalValue;
 	
 	// Use this for initialization
 
@@ -32,7 +33,16 @@ public class HandController : MonoBehaviour {
 		{
 			while(gameCards.Count < 2)
 			{
-				yield return StartCoroutine(DealCardToHand( 
+                if (this.handOwner == HandType.Opponent && gameCards.Count != 0)
+                    yield return StartCoroutine(DealCardToHand(
+                                        (GameCard gc) =>
+                                        {
+                                            gameCards.Add(gc);
+                                            gc.transform.parent = transform;
+                                        },
+                                        false
+                                    ));
+                else yield return StartCoroutine(DealCardToHand( 
 					(GameCard gc) =>
 				    {
 						gameCards.Add(gc);
@@ -44,7 +54,7 @@ public class HandController : MonoBehaviour {
 		}
 	}
 
-	public IEnumerator DealCardToHand(Action<GameCard> cardAnimComplete)
+	public IEnumerator DealCardToHand(Action<GameCard> cardAnimComplete, bool faceUp = true)
 	{
 		GameCard dealtCard = deckView.DrawCard();
 		switch(handOwner)
@@ -54,13 +64,16 @@ public class HandController : MonoBehaviour {
 				break;
 			case HandType.Opponent:
 				Vector3 vec = new Vector3(0,180,0);
-				dealtCard.transform.localRotation = Quaternion.Euler(vec);
-				dealtCard.transform.positionTo(.25f,transform.position + new Vector3(10*gameCards.Count,0,0));
+                if (faceUp == false)
+                    dealtCard.transform.localRotation = Quaternion.Euler(vec);
+                dealtCard.transform.positionTo(.25f, transform.position + new Vector3(10 * gameCards.Count, 0, 0));
 				break;
 		}
 		yield return new WaitForSeconds(.25f);
 		cardAnimComplete(dealtCard);
-	}
+        HandTotalValue += dealtCard.Model.GetBlackJackCardValue();
+        Debug.Log(this.handOwner.ToString() + " " + HandTotalValue);
+    }
 
 	public void AttackHand(HandController defender, GameCard attackCard)
 	{

@@ -9,6 +9,8 @@
 //------------------------------------------------------------------------------
 using System;
 using UnityEngine;
+using System.Collections;
+
 
 public enum PlayerState
 {
@@ -27,10 +29,29 @@ public class PlayerBrain : MonoBehaviour
 		myHand = GetComponent<HandController>();
 	}
 
-	public void Initialize(CombatZoneController zone)
-	{
-		combatZone = zone;
-	}
+    public void Initialize(CombatZoneController zone)
+    {
+        combatZone = zone;
+    }
+
+    public IEnumerator BeginTurn()
+    {
+        while (true)
+        {
+            yield return StartCoroutine(WaitForKeyDown(KeyCode.Space));
+            yield return new WaitForEndOfFrame();
+        }
+    }
+
+    IEnumerator WaitForKeyDown(KeyCode keyCode)
+    {
+        if (keyCode == KeyCode.Space)
+        {
+            Hit();
+        }
+        while (!Input.GetKeyDown(keyCode))
+            yield return null;
+    }
 
 	PlayerBrain defender;
 
@@ -56,6 +77,17 @@ public class PlayerBrain : MonoBehaviour
 	{
 		combatZone.BeginAttackPhase(this);
 	}
+
+    public void Hit()
+    {
+        Debug.Log("SLDFKJSD");
+        StartCoroutine(myHand.DealCardToHand((GameCard gc) =>
+                    {
+                        myHand.gameCards.Add(gc);
+                        gc.transform.parent = myHand.transform;
+                    })
+        );
+    }
 }
 
 
